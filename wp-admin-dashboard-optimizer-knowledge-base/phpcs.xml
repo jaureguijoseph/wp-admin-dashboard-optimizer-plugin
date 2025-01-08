@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Plugin Coding Standards">
+    <description>A custom set of code standard rules for secure WordPress plugin development.</description>
+
+    <!-- What to scan -->
+    <file>.</file>
+    <exclude-pattern>/vendor/</exclude-pattern>
+    <exclude-pattern>/node_modules/</exclude-pattern>
+    <exclude-pattern>/tests/</exclude-pattern>
+
+    <!-- How to scan -->
+    <arg value="sp"/> <!-- Show sniff and progress -->
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+
+    <!-- Rules: WordPress Coding Standards -->
+    <config name="minimum_supported_wp_version" value="6.0"/>
+    <rule ref="WordPress">
+        <!-- Exclude rules that conflict with secure practices -->
+        <exclude name="WordPress.Files.FileName"/>
+        <exclude name="WordPress.PHP.YodaConditions"/>
+    </rule>
+
+    <!-- Rules: PHP Compatibility -->
+    <config name="testVersion" value="7.4-"/>
+    <rule ref="PHPCompatibility"/>
+
+    <!-- Rules: Security -->
+    <rule ref="WordPress.Security"/>
+    <rule ref="WordPress.DB.PreparedSQL"/>
+    <rule ref="WordPress.WP.GlobalVariablesOverride"/>
+
+    <!-- Custom rules for financial data handling -->
+    <rule ref="Squiz.PHP.NonExecutableCode"/>
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="eval" value="null"/>
+                <element key="print_r" value="null"/>
+                <element key="var_dump" value="null"/>
+                <element key="error_log" value="null"/>
+                <element key="base64_decode" value="null"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Enforce strict types -->
+    <rule ref="Generic.PHP.RequireStrictTypes"/>
+
+    <!-- Enforce secure API practices -->
+    <rule ref="WordPress.WP.AlternativeFunctions"/>
+</ruleset>
